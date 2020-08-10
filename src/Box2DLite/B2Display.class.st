@@ -6,7 +6,7 @@ Class {
 		'canvas',
 		'viewport'
 	],
-	#category : #'Box2DLite-Demo-Morphic'
+	#category : #'Box2DLite-Demo'
 }
 
 { #category : #'instance creation' }
