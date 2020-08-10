@@ -9,7 +9,7 @@ B2Demo9 >> setup [
 	| b b1 j y mass frequencyHz dampingRatio omega d k softness biasFactor |
 	b1 := self newBody: 100.0 @ 20.0 mass: Float fmax.
 	b1 friction: 0.2.
-	b1 position: 0.0 @ -0.5 * b1 width y.
+	b1 position: 0.0 @ -0.5 * b1 extent y.
 	b1 rotation: 0.0.
 	world addBody: b1.
 	mass := 10.0.

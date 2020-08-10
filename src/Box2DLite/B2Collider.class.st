@@ -289,8 +289,8 @@ B2Collider >> relativeTol [
 { #category : #private }
 B2Collider >> setupBodyA: bodyA bodyB: bodyB [
 	| rotAT rotBT dp c absC absCT |
-	hA := 0.5 * bodyA width.
-	hB := 0.5 * bodyB width.
+	hA := 0.5 * bodyA extent.
+	hB := 0.5 * bodyB extent.
 	posA := bodyA position.
 	posB := bodyB position.
 	rotA := B2Mat22 rotation: bodyA rotation.

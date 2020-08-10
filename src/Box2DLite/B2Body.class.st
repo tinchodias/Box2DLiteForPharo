@@ -9,10 +9,10 @@ Class {
 		'force',
 		'torque',
 		'friction',
-		'width',
 		'invMass',
 		'invI',
-		'id'
+		'id',
+		'extent'
 	],
 	#classVars : [
 		'NextId'
@@ -59,6 +59,11 @@ B2Body >> applyImpulse: impulse r: r [
 	velocity := velocity + (invMass * impulse).
 	angularVelocity := angularVelocity
 		+ (invI * (r crossProduct: impulse))
+]
+
+{ #category : #accessing }
+B2Body >> extent [
+	^ extent
 ]
 
 { #category : #accessing }
@@ -136,7 +141,7 @@ B2Body >> printOn: aStream [
 	aStream
 		nextPutAll: self class name;
 		nextPut: $(;
-		nextPutAll: width asString;
+		nextPutAll: extent asString;
 		nextPut: $)
 ]
 
@@ -160,10 +165,10 @@ B2Body >> setExtent: aPoint mass: aFloat [
 	force := 0.0 @ 0.0.
 	torque := 0.0.
 	friction := 0.2.
-	width := aPoint.
+	extent := aPoint.
 	aFloat < Float fmax
 		ifTrue: [ invMass := 1.0 / aFloat.
-			i := aFloat * (width x squared + width y squared) / 12.0.
+			i := aFloat * (extent x squared + extent y squared) / 12.0.
 			invI := 1.0 / i ]
 		ifFalse: [ invMass := 0.0.
 			invI := 0.0 ]
@@ -195,9 +200,4 @@ B2Body >> velocity [
 { #category : #accessing }
 B2Body >> velocity: aPoint [
 	velocity := aPoint
-]
-
-{ #category : #accessing }
-B2Body >> width [
-	^ width
 ]

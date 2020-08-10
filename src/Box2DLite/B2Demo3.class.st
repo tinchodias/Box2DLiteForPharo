@@ -8,7 +8,7 @@ Class {
 B2Demo3 >> setup [
 	| b |
 	b := self newBody: 100.0 @ 20.0 mass: Float fmax.
-	b position: 0.0 @ (-0.5 * b width y).
+	b position: 0.0 @ (-0.5 * b extent y).
 	world addBody: b.
 	b := self newBody: 13.0 @ 0.25 mass: Float fmax.
 	b position: -2.0 @ 11.0.

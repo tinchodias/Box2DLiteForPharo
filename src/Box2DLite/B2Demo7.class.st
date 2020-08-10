@@ -9,7 +9,7 @@ B2Demo7 >> setup [
 	| b bs numPlanks mass j frequencyHz dampingRatio omega d k softness biasFactor |
 	b := self newBody: 100.0 @ 20.0 mass: Float fmax.
 	b friction: 0.2.
-	b position: 0.0 @ -0.5 * b width y.
+	b position: 0.0 @ -0.5 * b extent y.
 	b rotation: 0.0.
 	world addBody: b.
 	numPlanks := 15.

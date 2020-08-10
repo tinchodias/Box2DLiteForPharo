@@ -9,7 +9,7 @@ B2Demo2 >> setup [
 	| b1 b2 joint |
 	b1 := self newBody: 100.0 @ 20.0 mass: Float fmax.
 	b1 friction: 0.2.
-	b1 position: 0.0 @ -0.5 * b1 width y.
+	b1 position: 0.0 @ -0.5 * b1 extent y.
 	b1 rotation: 0.0.
 	world addBody: b1.
 	b2 := self newBody: 1.0 @ 1.0 mass: 100.0.

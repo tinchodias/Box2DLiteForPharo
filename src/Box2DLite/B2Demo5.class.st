@@ -9,7 +9,7 @@ B2Demo5 >> setup [
 	| b x y |
 	b := self newBody: 100.0 @ 20.0 mass: Float fmax.
 	b friction: 0.2.
-	b position: 0.0 @ (-0.5 * b width y).
+	b position: 0.0 @ (-0.5 * b extent y).
 	b rotation: 0.0.
 	world addBody: b.
 	x := -6.0 @ 0.75.

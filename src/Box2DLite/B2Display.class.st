@@ -6,7 +6,7 @@ Class {
 		'canvas',
 		'viewport'
 	],
-	#category : #'Box2DLite-Demo'
+	#category : #'Box2DLite-Demo-Morphic'
 }
 
 { #category : #'instance creation' }
@@ -33,7 +33,7 @@ B2Display >> drawBody: aBody [
 	canvas ifNil: [ ^ self ].
 	r := B2Mat22 rotation: aBody rotation.
 	p := aBody position.
-	h := 0.5 * aBody width.
+	h := 0.5 * aBody extent.
 	v1 := p + (r * (h x negated @ h y negated)).
 	v2 := p + (r * (h x @ h y negated)).
 	v3 := p + (r * (h x @ h y)).
