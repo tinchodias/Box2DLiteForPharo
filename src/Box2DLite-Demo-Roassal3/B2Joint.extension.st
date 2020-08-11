@@ -1,7 +1,7 @@
 Extension { #name : #B2Joint }
 
 { #category : #'*Box2DLite-Demo-Roassal3' }
-B2Joint >> drawOnRSCanvas: aRSCanvas [
+B2Joint >> addToRSComposite: aRSComposite [
 
 	| b1 b2 r1bis r2bis x1 p1 x2 p2 line |
 	b1 := self body1.
@@ -19,6 +19,6 @@ B2Joint >> drawOnRSCanvas: aRSCanvas [
 		color: Color blue;
 		yourself.
 	
-	aRSCanvas add: line.
+	aRSComposite add: line.
 
 ]

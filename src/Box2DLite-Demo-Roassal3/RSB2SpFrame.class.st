@@ -62,20 +62,22 @@ RSB2SpFrame >> initializePresenters [
 	buttonAccumulateImpulses
 		label: 'accumulate impulses';
 		state: B2World accumulateImpulses.
+
 	buttonWarmStarting := self newCheckBox.
 	buttonWarmStarting
 		label: 'warm starting';
 		state: B2World warmStarting.
+
 	buttonPositionCorrection := self newCheckBox.
 	buttonPositionCorrection
 		label: 'position correction';
 		state: B2World positionCorrection.
+
 	demos := self newList.
 	demos beSingleSelection.
 	demos items: self demoClasses.
 
 	stage := self instantiate: SpRoassalPresenter.
-	self initializeStage.
 
 	self focusOrder
 		add: demos;
@@ -83,40 +85,40 @@ RSB2SpFrame >> initializePresenters [
 ]
 
 { #category : #initialization }
-RSB2SpFrame >> initializeStage [
-"	| morph |
-	1halt."
-"	display := B2Display extent: self class stageExtent.
-	morph := B2DemoMorph new.
-	morph display: display.
-	stage morph: morph"
-]
-
-{ #category : #initialization }
 RSB2SpFrame >> initializeWindow: aWindow [
-	aWindow initialExtent: self class stageExtent + (120 @ 70)
+	aWindow
+		title: 'Box2DLite on Roassal3';
+		initialExtent: self class stageExtent + (120 @ 70)
 ]
 
 { #category : #private }
 RSB2SpFrame >> setupDemo: aSelection [
-	| demo canvas rect |
+	| demo canvas flippedComposite |
 	demo := aSelection selectedItem new.
-	canvas := stage canvas.
-	
-	rect := demo viewport.
-	
-	canvas camera 
-		zoomToFit: canvas extent
-		rectangle: ((rect origin * -1) corner: (rect corner * -1)).
 	demo restart.
 
+	"Clear canvas (may have shapes from previous selected demo"
+	canvas := stage canvas.
+	canvas shapes copy do: #remove.
+	flippedComposite := RSComposite new
+		scaleBy: (1 @ -1);
+		yourself.
+	canvas add: flippedComposite.
+
+	self flag: #fix. "Adding new interactions without cleaning old ones before."
 	canvas addInteraction: RSGraphCanvasMonitor. 
-	
 	canvas when: RSMouseClick send: #launchBomb to: demo.
-	
+
+	"Set RSCanvas' camera with viewport (whose coordinates must be flipped)"
+	canvas camera 
+		zoomToFit: canvas extent
+		rectangle: demo viewport flipped.
+		
 	canvas newAnimation repeat onStepDo: [ :t |
+		flippedComposite shapes copy do: #remove.
 		demo step.
-		demo drawOnRSCanvas: canvas.
+		(demo world bodies, demo world joints, demo world contacts)
+			do: [ :each | each addToRSComposite: flippedComposite ].
 		canvas signalUpdate ].
 
 ]
