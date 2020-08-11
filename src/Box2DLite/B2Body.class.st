@@ -155,6 +155,11 @@ B2Body >> rotation: aNumber [
 	rotation := aNumber
 ]
 
+{ #category : #accessing }
+B2Body >> rotationMatrix [
+	^ B2Mat22 rotation: rotation
+]
+
 { #category : #initialization }
 B2Body >> setExtent: aPoint mass: aFloat [
 	| i |

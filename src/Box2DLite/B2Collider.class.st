@@ -293,8 +293,8 @@ B2Collider >> setupBodyA: bodyA bodyB: bodyB [
 	hB := 0.5 * bodyB extent.
 	posA := bodyA position.
 	posB := bodyB position.
-	rotA := B2Mat22 rotation: bodyA rotation.
-	rotB := B2Mat22 rotation: bodyB rotation.
+	rotA := bodyA rotationMatrix.
+	rotB := bodyB rotationMatrix.
 	rotAT := rotA transpose.
 	rotBT := rotB transpose.
 	dp := posB - posA.

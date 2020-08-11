@@ -31,7 +31,7 @@ B2Display >> clear [
 B2Display >> drawBody: aBody [
 	| r p h v1 v2 v3 v4 |
 	canvas ifNil: [ ^ self ].
-	r := B2Mat22 rotation: aBody rotation.
+	r := aBody rotationMatrix.
 	p := aBody position.
 	h := 0.5 * aBody extent.
 	v1 := p + (r * (h x negated @ h y negated)).
@@ -60,15 +60,13 @@ B2Display >> drawContact: aContact [
 
 { #category : #api }
 B2Display >> drawJoint: aJoint [
-	| b1 b2 r1 r2 x1 p1 x2 p2 |
+	| b1 b2 x1 p1 x2 p2 |
 	b1 := aJoint body1.
 	b2 := aJoint body2.
-	r1 := B2Mat22 rotation: b1 rotation.
-	r2 := B2Mat22 rotation: b2 rotation.
 	x1 := b1 position.
-	p1 := x1 + (r1 * aJoint localAnchor1).
+	p1 := x1 + (b1 rotationMatrix * aJoint localAnchor1).
 	x2 := b2 position.
-	p2 := x2 + (r2 * aJoint localAnchor2).
+	p2 := x2 + (b2 rotationMatrix * aJoint localAnchor2).
 	{"(self viewingTransform: x1)."
 	(self viewingTransform: p1).
 	(self viewingTransform: x2).

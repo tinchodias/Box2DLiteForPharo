@@ -67,11 +67,9 @@ B2Joint >> localAnchor2 [
 
 { #category : #api }
 B2Joint >> preStep: invDt [
-	| rot1 rot2 k1 k2 k3 k p1 p2 dp |
-	rot1 := B2Mat22 rotation: body1 rotation.
-	rot2 := B2Mat22 rotation: body2 rotation.
-	r1 := rot1 * localAnchor1.
-	r2 := rot2 * localAnchor2.
+	| k1 k2 k3 k p1 p2 dp |
+	r1 := body1 rotationMatrix * localAnchor1.
+	r2 := body2 rotationMatrix * localAnchor2.
 	k1 := B2Mat22
 		col1: (body1 invMass + body2 invMass) @ 0.0
 		col2: 0.0 @ (body1 invMass + body2 invMass).
@@ -94,13 +92,11 @@ B2Joint >> preStep: invDt [
 
 { #category : #initialization }
 B2Joint >> setBody1: b1 body2: b2 anchor: anchor [
-	| rot1 rot2 rot1t rot2t |
+	| rot1t rot2t |
 	body1 := b1.
 	body2 := b2.
-	rot1 := B2Mat22 rotation: body1 rotation.
-	rot2 := B2Mat22 rotation: body2 rotation.
-	rot1t := rot1 transpose.
-	rot2t := rot2 transpose.
+	rot1t := body1 rotationMatrix transpose.
+	rot2t := body2 rotationMatrix transpose.
 	localAnchor1 := rot1t * (anchor - body1 position).
 	localAnchor2 := rot2t * (anchor - body2 position).
 	p := 0.0 @ 0.0.
