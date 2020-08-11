@@ -95,8 +95,8 @@ B2Joint >> setBody1: b1 body2: b2 anchor: anchor [
 	| rot1t rot2t |
 	body1 := b1.
 	body2 := b2.
-	rot1t := body1 rotationMatrix transpose.
-	rot2t := body2 rotationMatrix transpose.
+	rot1t := body1 rotationMatrix transposed.
+	rot2t := body2 rotationMatrix transposed.
 	localAnchor1 := rot1t * (anchor - body1 position).
 	localAnchor2 := rot2t * (anchor - body2 position).
 	p := 0.0 @ 0.0.

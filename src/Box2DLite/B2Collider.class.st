@@ -171,7 +171,7 @@ B2Collider >> computeIncidentEdgeH: h pos: pos rot: rot normal: normal2 [
 	| c0 c1 rotT n nAbs |
 	c0 := B2ClipVertex new.
 	c1 := B2ClipVertex new.
-	rotT := rot transpose.
+	rotT := rot transposed.
 	n := (rotT * normal2) negated.
 	nAbs := n abs.
 	nAbs x > nAbs y
@@ -295,14 +295,14 @@ B2Collider >> setupBodyA: bodyA bodyB: bodyB [
 	posB := bodyB position.
 	rotA := bodyA rotationMatrix.
 	rotB := bodyB rotationMatrix.
-	rotAT := rotA transpose.
-	rotBT := rotB transpose.
+	rotAT := rotA transposed.
+	rotBT := rotB transposed.
 	dp := posB - posA.
 	dA := rotAT * dp.
 	dB := rotBT * dp.
 	c := rotAT * rotB.
 	absC := c abs.
-	absCT := absC transpose.
+	absCT := absC transposed.
 	faceA := dA abs - hA - (absC * hB).
 	(faceA x > 0.0 or: [ faceA y > 0.0 ])
 		ifTrue: [ ^ false ].

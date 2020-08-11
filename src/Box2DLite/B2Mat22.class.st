@@ -106,6 +106,6 @@ B2Mat22 >> setRotation: aFloat [
 ]
 
 { #category : #api }
-B2Mat22 >> transpose [
+B2Mat22 >> transposed [
 	^ self class col1: col1 x @ col2 x col2: col1 y @ col2 y
 ]

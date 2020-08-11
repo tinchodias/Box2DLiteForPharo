@@ -119,7 +119,7 @@ B2Mat22Test >> testTranspose [
 	m := self newMat22.
 	m col1: 1 @ 2.
 	m col2: 3 @ 4.
-	n := m transpose.
+	n := m transposed.
 	self assert: n col1 equals: 1 @ 3.
 	self assert: n col2 equals: 2 @ 4
 ]
