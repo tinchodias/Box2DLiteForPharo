@@ -39,7 +39,15 @@ B2DemoMorph >> handlesMouseDown: anEvent [
 { #category : #'event handling' }
 B2DemoMorph >> mouseDown: anEvent [
 	demo ifNil: [ ^ self ].
-	demo launchBomb
+
+	"Left button"
+	anEvent redButtonChanged
+		ifTrue: [ demo launchBomb ].
+	
+	"Right button"
+	anEvent yellowButtonChanged
+		ifTrue: [ demo launchManyBombs ].
+			
 ]
 
 { #category : #'stepping and presenter' }

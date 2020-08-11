@@ -107,7 +107,8 @@ RSB2SpFrame >> setupDemo: aSelection [
 
 	self flag: #fix. "Adding new interactions without cleaning old ones before."
 	canvas addInteraction: RSGraphCanvasMonitor. 
-	canvas when: RSMouseClick send: #launchBomb to: demo.
+	canvas when: RSMouseLeftClick send: #launchBomb to: demo.
+	canvas when: RSMouseRightClick send: #launchManyBombs to: demo.
 
 	"Set RSCanvas' camera with viewport (whose coordinates must be flipped)"
 	canvas camera 

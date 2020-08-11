@@ -106,6 +106,11 @@ B2Demo >> launchBomb [
 	world addBody: bomb
 ]
 
+{ #category : #api }
+B2Demo >> launchManyBombs [
+	20 timesRepeat: [ self launchBomb ]
+]
+
 { #category : #private }
 B2Demo >> newBody: aPoint mass: aFloat [
 	^ B2Body extent: aPoint mass: aFloat
