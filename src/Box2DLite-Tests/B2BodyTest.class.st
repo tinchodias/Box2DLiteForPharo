@@ -22,6 +22,11 @@ B2BodyTest >> testAngularVelocity [
 ]
 
 { #category : #test }
+B2BodyTest >> testExtent [
+	self testSetExtentMass
+]
+
+{ #category : #test }
 B2BodyTest >> testForce [
 	| b |
 	b := self newBody.
@@ -122,7 +127,7 @@ B2BodyTest >> testSetExtentMass [
 	self assert: b force equals: 0 @ 0.
 	self assert: b torque equals: 0.
 	self assert: b friction equals: 0.2.
-	self assert: b width equals: 1 @ 2
+	self assert: b extent equals: 1 @ 2
 ]
 
 { #category : #test }
@@ -141,9 +146,4 @@ B2BodyTest >> testVelocity [
 	self assert: b velocity isNil.
 	b velocity: 1 @ 2.
 	self assert: b velocity equals: 1 @ 2
-]
-
-{ #category : #test }
-B2BodyTest >> testWidth [
-	self testSetExtentMass
 ]
