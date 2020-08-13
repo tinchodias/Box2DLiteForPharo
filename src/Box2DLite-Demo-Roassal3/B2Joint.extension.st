@@ -1,9 +1,17 @@
 Extension { #name : #B2Joint }
 
 { #category : #'*Box2DLite-Demo-Roassal3' }
-B2Joint >> addToRSComposite: aRSComposite [
+B2Joint >> asRSShape [
+	^ RSPolyline new
+		  color: Color blue;
+		  width: 0.01;
+		  yourself
+]
 
-	| b1 b2 x1 p1 x2 p2 line |
+{ #category : #'*Box2DLite-Demo-Roassal3' }
+B2Joint >> updateRSShape: aRSShape [
+
+	| b1 b2 x1 p1 x2 p2 |
 	b1 := self body1.
 	b2 := self body2.
 	x1 := b1 position.
@@ -11,12 +19,6 @@ B2Joint >> addToRSComposite: aRSComposite [
 	x2 := b2 position.
 	p2 := x2 + (b2 rotationMatrix * self localAnchor2).
 	
-	line := RSPolyline new
-		controlPoints: { p1. x2. p2 };
-		width: 0.01;
-		color: Color blue;
-		yourself.
-	
-	aRSComposite add: line.
+	aRSShape controlPoints: { p1. x2. p2 }
 
 ]

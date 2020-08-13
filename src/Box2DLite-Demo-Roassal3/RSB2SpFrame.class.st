@@ -116,10 +116,30 @@ RSB2SpFrame >> setupDemo: aSelection [
 		rectangle: demo viewport flipped.
 		
 	canvas newAnimation repeat onStepDo: [ :t |
-		flippedComposite shapes copy do: #remove.
+		| worldObjects |
 		demo step.
-		(demo world bodies, demo world joints, demo world contacts)
-			do: [ :each | each addToRSComposite: flippedComposite ].
+
+		worldObjects := demo world bodies, demo world joints, demo world contacts.
+		
+		flippedComposite shapes copy do: [ :each |
+			(worldObjects
+				remove: each model
+				ifAbsent: [ each remove. nil ])
+					ifNotNil: [
+						"The shape model still exists in the B2World
+						and might be updated position, rotation, etc."
+						each model updateRSShape: each ]
+					ifNil: [
+						"The shape model doesn't exist anymore in the B2World."
+						each remove ] ].
+		worldObjects do: [ :each |
+			| newShape |
+			"This is a new object in the B2World."
+			newShape := each asRSShape.
+			newShape model: self.
+			each updateRSShape: newShape.
+			flippedComposite add: newShape ].
+
 		canvas signalUpdate ].
 
 ]

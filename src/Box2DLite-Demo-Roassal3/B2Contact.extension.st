@@ -1,14 +1,14 @@
 Extension { #name : #B2Contact }
 
 { #category : #'*Box2DLite-Demo-Roassal3' }
-B2Contact >> addToRSComposite: aRSComposite [
+B2Contact >> asRSShape [
+	^ RSEllipse new
+		  color: Color red;
+		  extent: 0.1 asPoint;
+		  yourself
+]
 
-	| ellipse |
-	ellipse := RSEllipse new
-		color: Color red;
-		position: self position;
-		extent: 0.1 asPoint;
-		yourself.
-
-	aRSComposite add: ellipse.
+{ #category : #'*Box2DLite-Demo-Roassal3' }
+B2Contact >> updateRSShape: aRSShape [
+	aRSShape position: self position
 ]
