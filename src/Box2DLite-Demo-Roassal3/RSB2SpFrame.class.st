@@ -39,7 +39,7 @@ RSB2SpFrame class >> stageExtent [
 RSB2SpFrame >> connectPresenters [
 	demos
 		display: [ :each | each asString ];
-		whenSelectionChangedDo: [ :each | self setupDemo: each ].
+		whenSelectionChangedDo: [ :each | stage refresh ].
 	buttonAccumulateImpulses
 		whenActivatedDo: [ B2World accumulateImpulses: true ];
 		whenDeactivatedDo: [ B2World accumulateImpulses: false ].
@@ -54,6 +54,63 @@ RSB2SpFrame >> connectPresenters [
 { #category : #private }
 RSB2SpFrame >> demoClasses [
 	^ B2Demo subclasses
+]
+
+{ #category : #initialization }
+RSB2SpFrame >> initializeCanvas: canvas [
+		
+	| container demo highlightable popup |
+	demo := demos selection selectedItem
+		ifNil: [ ^ self ]
+		ifNotNil: [ :demoClass | demoClass new ].
+
+	demo restart.
+
+	container := RSComposite new
+		scaleBy: (1 @ -1);
+		yourself.
+	canvas add: container.
+
+	canvas addInteraction: RSGraphCanvasMonitor. 
+	canvas addInteraction: RSZoomableCanvas.
+	canvas when: RSMouseLeftClick send: #inspect to: demo world.
+"	canvas when: RSMouseRightClick send: #launchBomb to: demo."
+	canvas when: RSMouseRightClick send: #launchManyBombs to: demo.
+
+	highlightable := RSHighlightable new highlightColor: Color blue translucent; yourself.
+	popup := RSPopup new.
+
+	"Set RSCanvas' camera with viewport (whose coordinates must be flipped)"
+	canvas camera 
+		zoomToFit: canvas extent
+		rectangle: demo viewport flipped.
+	
+	canvas newAnimation repeat onStepDo: [ :t |
+		| currentWorldObjects |
+		demo step.
+		
+		currentWorldObjects := demo world bodies, demo world joints, demo world contacts.
+		
+		container shapes copy
+			reject: [ :each | currentWorldObjects includes: each model ]
+			thenDo: [ :each | each remove ].
+		
+		currentWorldObjects do: [ :each |
+			|shape|
+			shape := container shapes shapeFromModel: each.
+			shape ifNil: [
+				shape := each asRSShape
+					model: each;
+					addInteraction: highlightable;
+					addInteraction: popup;
+					when: RSMouseLeftClick send: #inspect to: each;
+					yourself.
+				container add: shape ].
+			each updateRSShape: shape.
+		].
+
+		canvas signalUpdate ].
+
 ]
 
 { #category : #initialization }
@@ -78,6 +135,8 @@ RSB2SpFrame >> initializePresenters [
 	demos items: self demoClasses.
 
 	stage := self instantiate: SpRoassalPresenter.
+	stage script: [ :canvas |
+		self initializeCanvas: canvas ].
 
 	self focusOrder
 		add: demos;
@@ -89,57 +148,4 @@ RSB2SpFrame >> initializeWindow: aWindow [
 	aWindow
 		title: 'Box2DLite on Roassal3';
 		initialExtent: self class stageExtent + (120 @ 70)
-]
-
-{ #category : #private }
-RSB2SpFrame >> setupDemo: aSelection [
-	| demo canvas flippedComposite |
-	demo := aSelection selectedItem new.
-	demo restart.
-
-	"Clear canvas (may have shapes from previous selected demo"
-	canvas := stage canvas.
-	canvas shapes copy do: #remove.
-	flippedComposite := RSComposite new
-		scaleBy: (1 @ -1);
-		yourself.
-	canvas add: flippedComposite.
-
-	self flag: #fix. "Adding new interactions without cleaning old ones before."
-	canvas addInteraction: RSGraphCanvasMonitor. 
-	canvas when: RSMouseLeftClick send: #launchBomb to: demo.
-	canvas when: RSMouseRightClick send: #launchManyBombs to: demo.
-
-	"Set RSCanvas' camera with viewport (whose coordinates must be flipped)"
-	canvas camera 
-		zoomToFit: canvas extent
-		rectangle: demo viewport flipped.
-		
-	canvas newAnimation repeat onStepDo: [ :t |
-		| worldObjects |
-		demo step.
-
-		worldObjects := demo world bodies, demo world joints, demo world contacts.
-		
-		flippedComposite shapes copy do: [ :each |
-			(worldObjects
-				remove: each model
-				ifAbsent: [ each remove. nil ])
-					ifNotNil: [
-						"The shape model still exists in the B2World
-						and might be updated position, rotation, etc."
-						each model updateRSShape: each ]
-					ifNil: [
-						"The shape model doesn't exist anymore in the B2World."
-						each remove ] ].
-		worldObjects do: [ :each |
-			| newShape |
-			"This is a new object in the B2World."
-			newShape := each asRSShape.
-			newShape model: self.
-			each updateRSShape: newShape.
-			flippedComposite add: newShape ].
-
-		canvas signalUpdate ].
-
 ]
