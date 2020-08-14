@@ -162,7 +162,6 @@ B2Body >> rotationMatrix [
 
 { #category : #initialization }
 B2Body >> setExtent: aPoint mass: aFloat [
-	| i |
 	position := 0.0 @ 0.0.
 	rotation := 0.0.
 	velocity := 0.0 @ 0.0.
@@ -172,7 +171,8 @@ B2Body >> setExtent: aPoint mass: aFloat [
 	friction := 0.2.
 	extent := aPoint.
 	aFloat < Float fmax
-		ifTrue: [ invMass := 1.0 / aFloat.
+		ifTrue: [ | i |
+			invMass := 1.0 / aFloat.
 			i := aFloat * (extent x squared + extent y squared) / 12.0.
 			invI := 1.0 / i ]
 		ifFalse: [ invMass := 0.0.
