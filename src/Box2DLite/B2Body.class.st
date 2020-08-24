@@ -119,6 +119,19 @@ B2Body >> invMass [
 	^ invMass
 ]
 
+{ #category : #accessing }
+B2Body >> mass: aFloat [
+	aFloat < Float fmax
+		ifTrue: [
+			| i |
+			invMass := 1.0 / aFloat.
+			i := aFloat * (extent x squared + extent y squared) / 12.0.
+			invI := 1.0 / i ]
+		ifFalse: [
+			invMass := 0.0.
+			invI := 0.0 ]
+]
+
 { #category : #api }
 B2Body >> massMatrixR: r [
 	^ B2Mat22
@@ -170,13 +183,7 @@ B2Body >> setExtent: aPoint mass: aFloat [
 	torque := 0.0.
 	friction := 0.2.
 	extent := aPoint.
-	aFloat < Float fmax
-		ifTrue: [ | i |
-			invMass := 1.0 / aFloat.
-			i := aFloat * (extent x squared + extent y squared) / 12.0.
-			invI := 1.0 / i ]
-		ifFalse: [ invMass := 0.0.
-			invI := 0.0 ]
+	self mass: aFloat.
 ]
 
 { #category : #api }
